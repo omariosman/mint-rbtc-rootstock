@@ -44,7 +44,7 @@ class CustomBlockchainConnection {
 async function main() {
     const rpcUrl = RSK_TESTNODES[0];
     const privateKey = process.env.PRIVATE_KEY;
-    console.log(`privateKey: ${privateKey} | ${privateKey}`);
+    const walletAddress = '0xd175C97ed5fc71EcA4DD70Df7aC799eF808a6942';
     // Create a custom blockchain connection
     const blockchainConnection = new CustomBlockchainConnection(privateKey, rpcUrl);
     // Initialize Flyover SDK
@@ -59,13 +59,31 @@ async function main() {
     try {
         const providers = await flyover.getLiquidityProviders();
         console.log('Liquidity Providers:', providers);
-        if (providers.length > 0) {
-            flyover.useLiquidityProvider(providers[0]);
-            console.log('Using liquidity provider:', providers[0]);
+        if (!providers || providers.length === 0) {
+            console.error('No liquidity providers available.');
+            return;
         }
-        else {
-            console.log('No liquidity providers found.');
+        // Use the first available liquidity provider
+        const selectedProvider = providers[0];
+        flyover.useLiquidityProvider(selectedProvider);
+        console.log('Using liquidity provider:', selectedProvider);
+        // Define the PeginQuoteRequest
+        const quoteRequest = {
+            callContractArguments: '0x0',
+            callEoaOrContractAddress: '0x0',
+            rskRefundAddress: walletAddress,
+            valueToTransfer: BigInt(0),
+        };
+        // Request quotes
+        const quotes = await flyover.getQuotes(quoteRequest);
+        if (quotes.length === 0) {
+            console.error('No quotes available.');
+            return;
         }
+        console.log('Quotes:', quotes);
+        // Accept the first quote
+        // const acceptedQuote = await flyover.acceptQuote(quotes[0]);
+        // console.log('Accepted Quote:', acceptedQuote);
     }
     catch (error) {
         console.error('Error fetching liquidity providers:', error);
