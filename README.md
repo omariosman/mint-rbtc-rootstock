@@ -1,4 +1,4 @@
-# tBTC Mint/Redeem Example
+# rBTC Mint/Redeem Example
 
 This is a TypeScript project that uses the [Rootstock](https://dev.rootstock.io/developers/integrate/flyover/sdk/) Bitcoin/Ethereum bridge to mint and redeem rBTC tokens.
 
