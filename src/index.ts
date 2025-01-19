@@ -5,7 +5,6 @@ import { RSK_TESTNODES } from './utils/constants.js';
 import dotenv from "dotenv";
 
 dotenv.config();
-
 class CustomBlockchainConnection {
     private readonly provider: providers.JsonRpcProvider;
     private readonly signer: ethers.Wallet;
