@@ -1,6 +1,6 @@
 import { Flyover } from '@rsksmart/flyover-sdk';
 import { ethers } from 'ethers';
-import { RSK_TESTNODES } from './utils/constants.js';
+import { RSK_TESTNET_NODES } from './utils/constants.js';
 import dotenv from "dotenv";
 dotenv.config();
 class CustomBlockchainConnection {
@@ -42,9 +42,9 @@ class CustomBlockchainConnection {
     }
 }
 async function main() {
-    const rpcUrl = RSK_TESTNODES[0];
+    const rpcUrl = RSK_TESTNET_NODES[0];
     const privateKey = process.env.PRIVATE_KEY;
-    const walletAddress = '0xd175C97ed5fc71EcA4DD70Df7aC799eF808a6942';
+    const walletAddress = '0xd175c97eD5Fc71eca4dD70Df7Ac799Ef808A6942';
     // Create a custom blockchain connection
     const blockchainConnection = new CustomBlockchainConnection(privateKey, rpcUrl);
     // Initialize Flyover SDK
@@ -70,9 +70,9 @@ async function main() {
         // Define the PeginQuoteRequest
         const quoteRequest = {
             callContractArguments: '0x0',
-            callEoaOrContractAddress: '0x0',
+            callEoaOrContractAddress: walletAddress,
             rskRefundAddress: walletAddress,
-            valueToTransfer: BigInt(0),
+            valueToTransfer: BigInt("10000000000000000"),
         };
         // Request quotes
         const quotes = await flyover.getQuotes(quoteRequest);
@@ -80,10 +80,10 @@ async function main() {
             console.error('No quotes available.');
             return;
         }
-        console.log('Quotes:', quotes);
-        // Accept the first quote
-        // const acceptedQuote = await flyover.acceptQuote(quotes[0]);
-        // console.log('Accepted Quote:', acceptedQuote);
+        // console.log('Quotes:', quotes);
+        // // Accept the first quote
+        // // const acceptedQuote = await flyover.acceptQuote(quotes[0]);
+        // // console.log('Accepted Quote:', acceptedQuote);
     }
     catch (error) {
         console.error('Error fetching liquidity providers:', error);
