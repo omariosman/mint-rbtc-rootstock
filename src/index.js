@@ -1,4 +1,5 @@
 import { Flyover } from '@rsksmart/flyover-sdk';
+import { BlockchainConnection } from '@rsksmart/bridges-core-sdk';
 import { ethers } from 'ethers';
 import { RSK_TESTNET_NODES } from './utils/constants.js';
 import dotenv from "dotenv";
@@ -46,14 +47,16 @@ async function main() {
     const privateKey = process.env.PRIVATE_KEY;
     const walletAddress = '0xd175c97eD5Fc71eca4dD70Df7Ac799Ef808A6942';
     // Create a custom blockchain connection
-    const blockchainConnection = new CustomBlockchainConnection(privateKey, rpcUrl);
+    // // const blockchainConnection = new CustomBlockchainConnection(privateKey, rpcUrl);
+    const rsk = await BlockchainConnection.createUsingPassphrase(process.env.MNEMONIC_PHRASE, rpcUrl);
     // Initialize Flyover SDK
     const flyover = new Flyover({
         network: 'Testnet',
+        rskConnection: rsk,
         captchaTokenResolver: async () => Promise.resolve(''),
     });
     // Connect Flyover to the custom blockchain connection
-    await flyover.connectToRsk(blockchainConnection);
+    // //await flyover.connectToRsk((blockchainConnection as unknown) as BlockchainConnection);
     console.log('Flyover connected to Rootstock Testnet successfully');
     // Fetch and use liquidity providers
     try {
@@ -69,17 +72,17 @@ async function main() {
         console.log('Using liquidity provider:', selectedProvider);
         // Define the PeginQuoteRequest
         const quoteRequest = {
-            callContractArguments: '0x0',
+            callContractArguments: '0x00',
             callEoaOrContractAddress: walletAddress,
             rskRefundAddress: walletAddress,
             valueToTransfer: BigInt("10000000000000000"),
         };
         // Request quotes
-        const quotes = await flyover.getQuotes(quoteRequest);
-        if (quotes.length === 0) {
-            console.error('No quotes available.');
-            return;
-        }
+        // const quotes = await flyover.getQuotes(quoteRequest);
+        // if (quotes.length === 0) {
+        //     console.error('No quotes available.');
+        //     return;
+        // }
         // console.log('Quotes:', quotes);
         // // Accept the first quote
         // // const acceptedQuote = await flyover.acceptQuote(quotes[0]);

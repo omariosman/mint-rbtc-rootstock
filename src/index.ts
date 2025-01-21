@@ -1,4 +1,5 @@
 import { Flyover } from '@rsksmart/flyover-sdk';
+import { BlockchainConnection } from '@rsksmart/bridges-core-sdk';
 import { ethers, providers,ContractReceipt } from 'ethers';
 import { Web3 } from 'web3';
 import { RSK_TESTNET_NODES } from './utils/constants.js';
@@ -56,17 +57,18 @@ async function main() {
     const walletAddress = '0xd175c97eD5Fc71eca4dD70Df7Ac799Ef808A6942';
 
     // Create a custom blockchain connection
-    const blockchainConnection = new CustomBlockchainConnection(privateKey, rpcUrl);
+    // // const blockchainConnection = new CustomBlockchainConnection(privateKey, rpcUrl);
+    const rsk = await BlockchainConnection.createUsingPassphrase(process.env.MNEMONIC_PHRASE as string, rpcUrl);
 
     // Initialize Flyover SDK
     const flyover = new Flyover({
         network: 'Testnet',
+        rskConnection: rsk,
         captchaTokenResolver: async () => Promise.resolve(''),
     });
 
     // Connect Flyover to the custom blockchain connection
-    await flyover.connectToRsk(blockchainConnection as any);
-
+    // //await flyover.connectToRsk((blockchainConnection as unknown) as BlockchainConnection);
     console.log('Flyover connected to Rootstock Testnet successfully');
 
     // Fetch and use liquidity providers
@@ -86,7 +88,7 @@ async function main() {
 
         // Define the PeginQuoteRequest
         const quoteRequest = {
-            callContractArguments: '0x0',
+            callContractArguments: '0x00', 
             callEoaOrContractAddress: walletAddress,
             rskRefundAddress: walletAddress,
             valueToTransfer: BigInt("10000000000000000"),
@@ -100,7 +102,6 @@ async function main() {
         }
 
         // console.log('Quotes:', quotes);
-
         // // Accept the first quote
         // // const acceptedQuote = await flyover.acceptQuote(quotes[0]);
         // // console.log('Accepted Quote:', acceptedQuote);
