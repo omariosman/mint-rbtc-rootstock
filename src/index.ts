@@ -11,12 +11,12 @@ async function main() {
 
     // Create a custom blockchain connection
     const rsk = await BlockchainConnection.createUsingPassphrase(process.env.MNEMONIC_PHRASE as string, rpcUrl);
-
+    console.log(`process.env.RECAPTCHA_TOKEN: ${process.env.RECAPTCHA_TOKEN}`);
     // Initialize Flyover SDK
     const flyover = new Flyover({
         network: 'Testnet',
         rskConnection: rsk,
-        captchaTokenResolver: async () => Promise.resolve(''),
+        captchaTokenResolver: async () => Promise.resolve(process.env.RECAPTCHA_TOKEN as string),
     });
 
     console.log('Flyover connected to Rootstock Testnet successfully');
