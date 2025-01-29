@@ -1,7 +1,7 @@
 import { Flyover } from '@rsksmart/flyover-sdk';
 import { BlockchainConnection } from '@rsksmart/bridges-core-sdk';
 import { ethers } from 'ethers';
-import { RSK_TESTNET_NODES } from './utils/constants.js';
+import { RPC_NODE } from './utils/constants.js';
 import dotenv from "dotenv";
 dotenv.config();
 class CustomBlockchainConnection {
@@ -43,7 +43,7 @@ class CustomBlockchainConnection {
     }
 }
 async function main() {
-    const rpcUrl = RSK_TESTNET_NODES[0];
+    const rpcUrl = RPC_NODE.TESTNET;
     const privateKey = process.env.PRIVATE_KEY;
     const walletAddress = '0xd175c97eD5Fc71eca4dD70Df7Ac799Ef808A6942';
     // Create a custom blockchain connection

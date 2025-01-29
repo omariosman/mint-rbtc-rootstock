@@ -19,6 +19,7 @@
   "dependencies": {
     "@rsksmart/flyover-sdk": "^1.6.2",
     "dotenv": "^16.4.7",
+    "recaptcha-v3": "^1.11.3",
     "web3": "^4.16.0"
   }
 }
